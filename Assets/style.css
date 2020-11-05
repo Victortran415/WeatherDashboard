@@ -1,0 +1,13 @@
+.jumbotron {
+    background-color: rgb(168, 166, 166);
+    color: black;
+    
+}
+
+#title {
+    font-size: 65px;
+}
+
+#search-box {
+    background-color: rgb(168, 166, 166);
+}

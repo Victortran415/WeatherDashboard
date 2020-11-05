@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"crossorigin="anonymous"/>
+
+    <link rel="stylesheet" href="./Assets/style.css">
+    <title>Weather Dashboard</title>
+</head>
+<body>
+    <div class="jumbotron container-fluid mt-1 text-center p-1">
+        <h1 id="title"><strong>Weather Dashboard</strong></h1>
+    </div>
+    <!-- creating a search button -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4" id="search-box">
+                <h4 class="pt-3"><strong>Search:</strong></h4>
+
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control"id="search-city" aria-label="City Search" aria-describedby="search-btn" value="City Name">
+                    <div class="input-group-append">
+                        <button class=" btn bg-primary text-light" id="search-btn"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+                <!-- clearing history of cities that you've searched -->
+                <button class=" btn btn-primary" type="button" id="clear-list">Clear History</button>
+                <ul class="list-group">
+                </ul>
+            </div>
+            <div class="col-sm-8">
+                <div class="row ml-2 border border-dark">
+                    <div class="col-sm-12" id="current-weather">
+                        <!-- These elements will provide info basic on the searched city -->
+                        <h3 class="city-name mb-1 mt-2 bolder" id="current-city"></h3>
+                        <p>Temperature:<span class="current" id="temp"></span></p>
+                        <p>Max Temp: <span class="current" id="temp"></span></p>
+                        <p>Min Temp: <span class="current" id="temp"></span></p>
+                        <p>Humidity:<span class="current" id="humidity"></span></p> 
+                        <p>UV index:<span class="current bg-success rounded py-2 px-5 text-white" id="uv-idx"></span></p> 
+                    </div>
+                </div>
+
+
+
+    
+    <script src="./Assets/script.js"></script>
+</body>
+</html>
