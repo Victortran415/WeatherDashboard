@@ -8,11 +8,13 @@ var cityInput = $("#search-city");
 
 var cityName = $(".cityName");
 var historyList = $(".list-group")
+var icon = $("#icon")
 
 var tempEle = $("#temp");
 var humidityEle = $("#humidity")
 var windSpeedEle = $("#windspeed")
 var uvIdxEle = $("#uv-idx")
+
 
 
 searchBtn.on("click", function(e) {
@@ -29,11 +31,12 @@ searchBtn.on("click", function(e) {
 
 })
 
-function weatherData(name, temp, humidity, windSpd) {
+function weatherData(name, temp, humidity, windSpd, iconID) {
     cityName.text(name);
-    tempEle.text(" " + temp);
+    tempEle.text(" " + temp + "°F");
     humidityEle.text(" " + humidity + "%");
-    windSpeedEle.text(" " + windSpd + "MPH")
+    windSpeedEle.text(" " + windSpd + " MPH")
+    icon.attr("src", iconID)
 }
 console.log(weatherData)
 
@@ -49,10 +52,16 @@ function currentWeather(searchedCity) {
             temp: currWeatherInfo.main.temp,
             humidity: currWeatherInfo.main.humidity,
             windSpd: currWeatherInfo.wind.speed,
+            iconID: currWeatherInfo.weather[0].icon
+            // UPDATE: need to add an UV Index
         }
-        
+
+        // created an icon for the current weather
+        var iconID = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
         weatherData(
-        cityInfo.name,cityInfo.temp,cityInfo.humidity, cityInfo.windSpd)
+        cityInfo.name,cityInfo.temp,cityInfo.humidity, cityInfo.windSpd, iconID)
+
+        // UPDATE: must add UV info above ^^^^:
+
     })
-    
 }
