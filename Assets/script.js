@@ -4,6 +4,7 @@ var APIkey = '&APPID=e0876bb83e7f5e06b1c6b43fc115403c'
 var unit = '&units=imperial'
 
 var searchBtn = $("#search-btn");
+var clearBtn = $("#clear-list")
 var cityInput = $("#search-city");
 
 var cityName = $(".cityName");
@@ -27,8 +28,11 @@ searchBtn.on("click", function(e) {
     // checking to see if button operating correctly
     console.log('clicked')
     currentWeather(cityInput.val())
+})
 
-
+//button to clear searched history
+clearBtn.on("click", function(){
+    console.log("history list")
 })
 
 function weatherData(name, temp, humidity, windSpd, iconID) {
@@ -65,3 +69,5 @@ function currentWeather(searchedCity) {
 
     })
 }
+
+
