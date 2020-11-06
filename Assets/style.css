@@ -1,6 +1,7 @@
 .jumbotron {
     background-color: rgb(168, 166, 166);
     color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     
 }
 
@@ -10,4 +11,10 @@
 
 #search-box {
     background-color: rgb(168, 166, 166);
+    padding-bottom: 10px;
+}
+
+.cityName {
+    text-decoration: underline;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }

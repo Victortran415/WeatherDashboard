@@ -22,7 +22,7 @@
                 <h4 class="pt-3"><strong>Search:</strong></h4>
 
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control"id="search-city" aria-label="City Search" aria-describedby="search-btn" value="City Name">
+                    <input type="text" class="form-control"id="search-city" aria-label="City Search" aria-describedby="search-btn" placeholder="City Name">
                     <div class="input-group-append">
                         <button class=" btn bg-primary text-light" id="search-btn"><i class="fa fa-search"></i></button>
                     </div>
@@ -37,17 +37,38 @@
                     <div class="col-sm-12" id="current-weather">
                         <!-- These elements will provide info basic on the searched city -->
                         <h3 class="city-name mb-1 mt-2 bolder" id="current-city"></h3>
+                        <h1 class="cityName">San Francisco</h1>
                         <p>Temperature:<span class="current" id="temp"></span></p>
-                        <p>Max Temp: <span class="current" id="temp"></span></p>
-                        <p>Min Temp: <span class="current" id="temp"></span></p>
                         <p>Humidity:<span class="current" id="humidity"></span></p> 
-                        <p>UV index:<span class="current bg-success rounded py-2 px-5 text-white" id="uv-idx"></span></p> 
+                        <p>Wind Speed:<span class="current" id="windspeed"></span></p> 
+                        <p>UV index:<span class="current bg-success rounded py-2 px-3 text-white" id="uv-idx"></span></p> 
                     </div>
                 </div>
-
-
-
+            </div>
+            <div class="mt-4 col-md-12">
+                <h5 class="mt-3">5-Day Forecast:</h5>
+                <div class="row">
+                    <div class="card col-md-4 bg-primary text-white">
+                        <div class="card-body p-3">
+                            <h5 class="card-title">10/07/2020
+                            <img src="" alt="">
+                            </h5>
+                            <p class="card-text">Temp: </p>
+                            <p class="card-text">Humidity: </p>
+                            <p class="card-text">Wind Speed: </p>
+                            <p class="card-text">UV Index: </p>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
     
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="./Assets/script.js"></script>
 </body>
 </html>
