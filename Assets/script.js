@@ -1,5 +1,6 @@
 var APIkey = '&APPID=e0876bb83e7f5e06b1c6b43fc115403c'
 var apiForecast = 'http://api.openweathermap.org/data/2.5/forecast?q='
+var currentWeatherApi = 'api.openweathermap.org/data/2.5/weather?q='
 var unit = '&units=imperial'
 
 var searchBtn = $("#search-btn");
@@ -7,6 +8,11 @@ var cityInput = $("#search-city");
 
 var cityName = $(".cityName");
 var historyList = $(".list-group")
+
+var tempEle = $("#temp");
+var humidityEle = $("#humidity")
+var windSpeedEle = $("#windspeed")
+var uvIdxEle = $("#uv-idx")
 
 
 searchBtn.on("click", function(e) {
@@ -21,3 +27,19 @@ searchBtn.on("click", function(e) {
 
 
 })
+
+function currentWeather(searchedCity) {
+    var weatherUrl = currentWeatherApi + $(searchedCity) + APIkey + unit;
+    $.ajax({
+        url: weatherUrl,
+        method: "GET"
+    })
+    .then(function(currWeatherInfo) {
+        var cityInfo = {
+            name: currWeatherInfo.name,
+            temp: currWeatherInfo.main.temp,
+            humidity: currWeatherInfo.main.humidity,
+            windSpd: currWeatherInfo.wind.speed,
+        }
+    })
+}
