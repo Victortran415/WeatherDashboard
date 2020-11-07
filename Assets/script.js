@@ -6,6 +6,7 @@ var unit = '&units=imperial'
 var searchBtn = $("#search-btn");
 var clearBtn = $("#clear-list")
 var cityInput = $("#search-city");
+var cardRow = $(".card-row")
 
 var cityName = $(".cityName");
 var historyList = $(".history-list")
@@ -115,5 +116,47 @@ function currentWeather(searchedCity) {
 
     })
     
-    })
+    });
+    fiveDayForecast()
+
+    function fiveDayForecast() {
+        cardRow.empty();
+        var forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchedCity}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
+        $.ajax({
+            url: forecastUrl,
+            method: "GET"
+        })
+        .then(function(nextFiveDays) {
+            for (var i = 0 ; i != nextFiveDays.list.length; i += 8) {
+                var cityInfo = {
+                    date: nextFiveDays.list[i].dt_txt,
+                    icon: nextFiveDays.list[i].weather[0].icon,
+                    temp: nextFiveDays.list[i].main.temp,
+                    humidity: nextFiveDays.list[i].main.humidity
+                }
+                var dateStr = cityInfo.date;
+                var trimDate = dateStr.substring (0, 10);
+                var weatherIcon = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`;
+
+            // FIXME: Icon and Temp not working
+
+                forecastCards(trimDate, weatherIcon, cityInfo.temp, cityInfo.humidity)
+            }
+        })
+    }
 }
+function forecastCards(date, temp, humidity, icon) {
+    let fiveDayCardEl = $("<div>").attr("class", "five-day-card");
+    let cardDate = $("<h4>").attr("class", "card-text");
+    let cardIcon = $("<img>").attr("class", "weatherIcon");
+    let cardTemp = $("<p>").attr("class", "card-text");
+    let cardHumidity = $("<p>").attr("class", "card-text");
+
+    cardRow.append(fiveDayCardEl);
+    cardDate.text(date);
+    cardIcon.attr("src", icon);
+    cardTemp.text(`Temp: ${temp} °F`);
+    cardHumidity.text(`Humidity: ${humidity}%`);
+    fiveDayCardEl.append(cardDate, cardIcon, cardTemp, cardHumidity);
+}
+
