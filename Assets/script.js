@@ -9,12 +9,14 @@ var cityInput = $("#search-city");
 
 var cityName = $(".cityName");
 var historyList = $(".history-list")
-var icon = $("#icon")
+
 
 var tempEle = $("#temp");
 var humidityEle = $("#humidity")
 var windSpeedEle = $("#windspeed")
 var uvIdxEle = $("#uv-idx")
+var icon = $("#icon")
+
 
 
 searchBtn.on("click", function(e) {
@@ -23,15 +25,25 @@ searchBtn.on("click", function(e) {
     currentWeather(cityInput.val())
 })
 
+if (JSON.parse(localStorage.getItem("searchCity")) === null) {
+}else{
+    cityHistory();
+}
+
+$(document).on("click", ".newEntry", function() {
+    console.log("clicked history item")
+    let thisElement = $(this);
+    currentWeather(thisElement.text());
+})
 
 
 function cityHistory(name){
     historyList.empty();
     var cityArr = JSON.parse(localStorage.getItem("searchCity"));
     for (var i = 0; i < cityArr.length; i++) {
-        let cityList = $("<li>").attr("class", newEntry);
+        let cityList = $("<li>").attr("class", "newEntry");
         cityList.text(cityArr[i])
-        cityList.append.historyList
+        historyList.prepend(cityList)
     }
 }
 
@@ -60,20 +72,48 @@ function currentWeather(searchedCity) {
             windSpd: currWeatherInfo.wind.speed,
             iconID: currWeatherInfo.weather[0].icon,
             uvIdx: currWeatherInfo.coord
-            // UPDATE: need to add an UV Index
+    
         }
-
-        var uvUrl = `https://api.openweathermap.org/data/2.5/uvi?lat=${cityInfo.uvIdx.lat}&lon=${cityInfo.uvIdx.lon}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
+    var uvUrl = `https://api.openweathermap.org/data/2.5/uvi?lat=${cityInfo.uvIdx.lat}&lon=${cityInfo.uvIdx.lon}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
     $.ajax({
         url: uvUrl,
         method: 'GET'
     })
-        // created an icon for the current weather
-        var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
-        weatherData(
-        cityInfo.name,cityInfo.temp,cityInfo.humidity, cityInfo.windSpd, iconIDurl)
+    .then(function(uvIdxData) {
+        if (JSON.parse(localStorage.getItem("searchCity")) == null) {
+            var cityArr = [];
+            if (cityArr.indexOf(cityInfo.name) === -1) {
+                cityArr.push(cityInfo.name);
 
-        // UPDATE: must add UV info above ^^^^:
+                localStorage.setItem("searchCity", JSON.stringify(cityArr));
+                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
+                
+                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl, uvIdxData.value)
+                cityHistory(cityInfo.name);
+            } else {
+                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
+                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl, uvIdxData.value)
+            }
+        } else {
+            var cityArr = JSON.parse(localStorage.getItem("searchCity"));
+            if (cityArr.indexOf(cityInfo.name) === -1) {
+                cityArr.push(cityArr.name);
 
+                localStorage.setItem("searchCity", JSON.stringify(cityArr));
+                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
+                
+                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl)
+                cityHistory(cityInfo.name);
+            }
+            else {
+                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
+                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl)
+
+                // FIXME: historyList is not updating, UV Index not working
+            }
+        }
+
+    })
+    
     })
 }
