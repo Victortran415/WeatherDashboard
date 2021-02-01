@@ -66,7 +66,7 @@ function cityHistory(cityName){
     historyList.empty();
     var cityArr = JSON.parse(localStorage.getItem("searchCity"));
     for (var i = 0; i < cityArr.length; i++) {
-        let cityList = $("<li>").attr("class", "newEntry");
+        let cityList = $("<ul>").attr("class", "newEntry");
         cityList.text(cityArr[i])
         historyList.prepend(cityList)
     }
