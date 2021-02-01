@@ -10,12 +10,20 @@ var cardRow = $(".card-row")
 var cityName = $(".cityName");
 var historyList = $(".history-list")
 
-
+let currentDate = $(".currentDate")
 var tempEle = $("#temp");
 var humidityEle = $("#humidity")
 var windSpeedEle = $("#windspeed")
 var uvIdxEle = $("#uv-idx")
 var icon = $("#icon")
+
+let date = new Date();
+let day = String(date.getDate()).padStart(2, '0');
+let month = String(date.getMonth() + 1).padStart(2, '0');
+let year = date.getFullYear()
+
+let currDate = `${month}/${day}/${year}`
+console.log(currDate)
 
 if (JSON.parse(localStorage.getItem("searchCity")) === null) {
     console.log("searchCity not found")
@@ -27,15 +35,12 @@ if (JSON.parse(localStorage.getItem("searchCity")) === null) {
 searchBtn.on("click", function(e) {
     e.preventDefault();
     console.log('clicked')
+    if (cityInput.val() === "") {
+        alert("City name must be added")
+        return;
+    }
     currentWeather(cityInput.val())
 })
-
-if (JSON.parse(localStorage.getItem("searchCity")) === null) {
-}else{
-    cityHistory();
-}
-
-
 
 
 
@@ -61,9 +66,10 @@ function weatherData(name, temp, humidity, windSpd, iconID, uvIdx) {
     cityName.text(name);
     tempEle.text(" " + temp + "°F");
     humidityEle.text(" " + humidity + "%");
-    windSpeedEle.text(" " + windSpd + " MPH")
-    icon.attr("src", iconID)
-    uvIdxEle.text(" " + uvIdx)
+    windSpeedEle.text(" " + windSpd + " MPH");
+    icon.attr("src", iconID);
+    uvIdxEle.text(" " + uvIdx);
+    currentDate = 
 }
 
 
