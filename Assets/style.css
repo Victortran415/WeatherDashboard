@@ -48,3 +48,13 @@
 .five-day-card h4 {
     margin: 5px;
 }
+
+ul {
+    height: 100%;
+    font-size: larger;
+    background-color: white;
+    border: solid 1px #cecfd2;
+    border-radius: 0px 0px 0px 0px;
+    padding: 12px 5px 12px 15px;
+    list-style: none;
+}
