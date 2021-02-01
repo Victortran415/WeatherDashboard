@@ -1,21 +1,32 @@
-var APIkey = '&APPID=e0876bb83e7f5e06b1c6b43fc115403c'
+var apiKey = 'e0876bb83e7f5e06b1c6b43fc115403c'
 
 var unit = '&units=imperial'
 
+//search button
 var searchBtn = $("#search-btn");
-var clearBtn = $("#clear-list")
-var cityInput = $("#search-city");
+
+//city name 
+var cityNameEle = $(".city-name");
+
+
+
+var cityInput = $(".search-city");
+
+//forecast cards
 var cardRow = $(".card-row")
 
-var cityName = $(".cityName");
+
 var historyList = $(".history-list")
 
+//current date 
 let currentDate = $(".currentDate")
 var tempEle = $("#temp");
 var humidityEle = $("#humidity")
 var windSpeedEle = $("#windspeed")
 var uvIdxEle = $("#uv-idx")
 var icon = $("#icon")
+
+
 
 let date = new Date();
 let day = String(date.getDate()).padStart(2, '0');
@@ -51,7 +62,7 @@ $(document).on("click", ".newEntry", function() {
 })
 
 
-function cityHistory(name){
+function cityHistory(cityName){
     historyList.empty();
     var cityArr = JSON.parse(localStorage.getItem("searchCity"));
     for (var i = 0; i < cityArr.length; i++) {
@@ -62,34 +73,35 @@ function cityHistory(name){
 }
 
 
-function weatherData(name, temp, humidity, windSpd, iconID, uvIdx) {
-    cityName.text(name);
-    tempEle.text(" " + temp + "°F");
-    humidityEle.text(" " + humidity + "%");
-    windSpeedEle.text(" " + windSpd + " MPH");
+function weatherData(cityName, cityTemp, cityHumidity, cityWindSpd, iconID, uvIdx) {
+    cityNameEle.text(cityName);
+    tempEle.text(`Temperature: ${cityTemp} °F`);
+    humidityEle.text(`Humidity: ${cityHumidity}%`);
+    windSpeedEle.text(`Wind Speed: ${cityWindSpd}MPH`);
     icon.attr("src", iconID);
-    uvIdxEle.text(" " + uvIdx);
-    currentDate = 
+    uvIdxEle.text(`UV Index: ${uvIdx}`);
+    currentDate.text(`(${currDate})`) 
 }
 
 
 function currentWeather(searchedCity) {
-    var queryUrl = `http://api.openweathermap.org/data/2.5/weather?q=${searchedCity}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`;
+    var queryUrl = `http://api.openweathermap.org/data/2.5/weather?q=${searchedCity}&APPID=${apiKey}&units=imperial`;
     $.ajax({
         url: queryUrl,
         method: "GET"
     })
     .then(function(currWeatherInfo) {
         var cityInfo = {
-            name: currWeatherInfo.name,
-            temp: currWeatherInfo.main.temp,
-            humidity: currWeatherInfo.main.humidity,
-            windSpd: currWeatherInfo.wind.speed,
+            cityName: currWeatherInfo.name,
+            cityTemp: currWeatherInfo.main.temp,
+            cityHumidity: currWeatherInfo.main.humidity,
+            cityWindSpd: currWeatherInfo.wind.speed,
             iconID: currWeatherInfo.weather[0].icon,
-            uvIdx: currWeatherInfo.coord
+            uvIdx: currWeatherInfo.coord,
+            
     
         }
-    var queryUrl = `https://api.openweathermap.org/data/2.5/uvi?lat=${cityInfo.uvIdx.lat}&lon=${cityInfo.uvIdx.lon}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
+    var queryUrl = `https://api.openweathermap.org/data/2.5/uvi?lat=${cityInfo.uvIdx.lat}&lon=${cityInfo.uvIdx.lon}&APPID=${apiKey}&units=imperial`
     $.ajax({
         url: queryUrl,
         method: 'GET'
@@ -97,37 +109,36 @@ function currentWeather(searchedCity) {
     .then(function(uvIdxData) {
         if (JSON.parse(localStorage.getItem("searchCity")) == null) {
             var cityArr = [];
-            if (cityArr.indexOf(cityInfo.name) === -1) {
-                cityArr.push(cityInfo.name);
+            if (cityArr.indexOf(cityInfo.cityName) === -1) {
+                cityArr.push(cityInfo.cityName);
 
                 localStorage.setItem("searchCity", JSON.stringify(cityArr));
                 var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
                 
-                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl, uvIdxData.value)
-                cityHistory(cityInfo.name);
+                weatherData(cityInfo.cityName, cityInfo.cityTemp, cityInfo.cityHumidity, cityInfo.cityWindSpd, iconIDurl, uvIdxData.value)
+                cityHistory(cityInfo.cityName);
             } else {
+                console.log('city already in search area')
                 var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
-                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl, uvIdxData.value)
+
+                weatherData(cityInfo.cityName, cityInfo.cityTemp, cityInfo.cityHumidity, cityInfo.cityWindSpd, iconIDurl)
             }
         } else {
-            var cityArr = JSON.parse(localStorage.getItem("searchCity"));
-            if (cityArr.indexOf(cityInfo.name) === -1) {
-                cityArr.push(cityArr.name);
+            let cityArr = JSON.parse(localStorage.getItem("searchCity"));
+            if (cityArr.indexOf(cityInfo.cityName === -1)) {
+                cityArr.push(cityInfo.cityName);
 
                 localStorage.setItem("searchCity", JSON.stringify(cityArr));
-                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
-                
-                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl)
-                cityHistory(cityInfo.name);
-            }
-            else {
-                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
-                weatherData(cityInfo.name, cityInfo.temp, cityInfo.humidity, cityInfo.windSpd, iconIDurl)
+                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`;
 
-                // FIXME: historyList is not updating, UV Index not working
+                weatherData(cityInfo.cityName, cityInfo.cityTemp, cityInfo.cityHumidity, cityInfo.cityWindSpd, iconIDurl, uvIdxData.value)
+                cityHistory(cityInfo.cityName)
+            } else {
+                var iconIDurl = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`
+
+                weatherData(cityInfo.cityName, cityInfo.cityTemp, cityInfo.cityHumidity, cityInfo.cityWindSpd, iconIDurl)
             }
         }
-
     })
     
     });
@@ -135,7 +146,7 @@ function currentWeather(searchedCity) {
 
     function fiveDayForecast() {
         cardRow.empty();
-        var queryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchedCity}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
+        var queryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchedCity}&APPID=${apiKey}&units=imperial`
         $.ajax({
             url: queryUrl,
             method: "GET"
@@ -149,8 +160,8 @@ function currentWeather(searchedCity) {
                     humidity: nextFiveDays.list[i].main.humidity
                 }
                 var dateStr = cityInfo.date;
-                var trimDate = dateStr.substring (0, 10);
-                var weatherIcon = `https:///openweathermap.org/img/w/${cityInfo.iconID}.png`;
+                var trimDate = dateStr.substring(0, 10);
+                var weatherIcon = `https:///openweathermap.org/img/w/${cityInfo.icon}.png`;
 
             // FIXME: Icon and Temp not working
 
@@ -159,7 +170,7 @@ function currentWeather(searchedCity) {
         })
     }
 }
-function forecastCards(date, temp, humidity, icon) {
+function forecastCards(date, icon, temp, humidity ) {
     let fiveDayCardEl = $("<div>").attr("class", "five-day-card");
     let cardDate = $("<h4>").attr("class", "card-text");
     let cardIcon = $("<img>").attr("class", "weatherIcon");
