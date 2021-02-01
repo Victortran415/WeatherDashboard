@@ -1,6 +1,5 @@
 var APIkey = '&APPID=e0876bb83e7f5e06b1c6b43fc115403c'
-// var apiForecast = 'https://api.openweathermap.org/data/2.5/forecast?q='
-// var currentWeatherApi = 'http://api.openweathermap.org/data/2.5/weather?q='
+
 var unit = '&units=imperial'
 
 var searchBtn = $("#search-btn");
@@ -18,7 +17,12 @@ var windSpeedEle = $("#windspeed")
 var uvIdxEle = $("#uv-idx")
 var icon = $("#icon")
 
-
+if (JSON.parse(localStorage.getItem("searchCity")) === null) {
+    console.log("searchCity not found")
+} else {
+    console.log("loaded into history")
+    cityHistory();
+}
 
 searchBtn.on("click", function(e) {
     e.preventDefault();
@@ -30,6 +34,10 @@ if (JSON.parse(localStorage.getItem("searchCity")) === null) {
 }else{
     cityHistory();
 }
+
+
+
+
 
 $(document).on("click", ".newEntry", function() {
     console.log("clicked history item")
@@ -60,9 +68,9 @@ function weatherData(name, temp, humidity, windSpd, iconID, uvIdx) {
 
 
 function currentWeather(searchedCity) {
-    var weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${searchedCity}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`;
+    var queryUrl = `http://api.openweathermap.org/data/2.5/weather?q=${searchedCity}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`;
     $.ajax({
-        url: weatherUrl,
+        url: queryUrl,
         method: "GET"
     })
     .then(function(currWeatherInfo) {
@@ -75,9 +83,9 @@ function currentWeather(searchedCity) {
             uvIdx: currWeatherInfo.coord
     
         }
-    var uvUrl = `https://api.openweathermap.org/data/2.5/uvi?lat=${cityInfo.uvIdx.lat}&lon=${cityInfo.uvIdx.lon}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
+    var queryUrl = `https://api.openweathermap.org/data/2.5/uvi?lat=${cityInfo.uvIdx.lat}&lon=${cityInfo.uvIdx.lon}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
     $.ajax({
-        url: uvUrl,
+        url: queryUrl,
         method: 'GET'
     })
     .then(function(uvIdxData) {
@@ -121,9 +129,9 @@ function currentWeather(searchedCity) {
 
     function fiveDayForecast() {
         cardRow.empty();
-        var forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchedCity}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
+        var queryUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${searchedCity}&APPID=e0876bb83e7f5e06b1c6b43fc115403c&units=imperial`
         $.ajax({
-            url: forecastUrl,
+            url: queryUrl,
             method: "GET"
         })
         .then(function(nextFiveDays) {
